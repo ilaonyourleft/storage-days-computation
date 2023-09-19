@@ -1,0 +1,309 @@
+{% set current_date = 'now'|date("U") %}
+{% set current_year = 'now'|date("Y") %}
+{% set current_month = 'now'|date("m") %}
+{% set current_day = 'now'|date("d") %}
+{% set months28 = ['02'] %}
+{% set months30 = ['04', '06', '09', '11'] %}
+{% set months31 = ['01', '03', '05', '07', '08', '10', '12'] %}
+{% set closing_date = field_prodotto_disponibile_fino_|date("U") %}
+{% set closing_year = field_prodotto_disponibile_fino_|date("Y") %}
+{% set closing_month = field_prodotto_disponibile_fino_|date("m") %}
+{% set closing_day = field_prodotto_disponibile_fino_|date("d") %}
+{% set days = (closing_date - current_date|date("U")) // (60 * 60 * 24) %}
+
+{% if days <= 0 %}
+    Stored
+{% else %}
+    {% if closing_year == current_year %}
+        {% if closing_month == current_month %}
+            {% if closing_day == current_day %}
+                0 days
+            {% else %}
+                {% if (closing_day - current_day) < 1 %}
+                {% elseif (closing_day - current_day) < 2 %}
+                    {{ closing_day - current_day }} day
+                {% else %}
+                    {{ closing_day - current_day }} days
+                {% endif %}
+            {% endif %}
+        {% else %}
+            {% if closing_day == current_day %}
+                {% if (closing_month - current_month) < 1 %}
+                {% elseif (closing_month - current_month) < 2 %}
+                    {{ closing_month - current_month }} month
+                {% else %}
+                    {{ closing_month - current_month }} months
+                {% endif %}
+            {% elseif closing_day > current_day %}
+                {% if (closing_month - current_month) < 1 %}
+                {% elseif (closing_month - current_month) < 2 %}
+                    {{ closing_month - current_month }} month
+                {% else %}
+                    {{ closing_month - current_month }} months
+                {% endif %}
+                {% if (closing_day - current_day) < 1 %}
+                {% elseif (closing_day - current_day) < 2 %}
+                     {{ closing_day - current_day }} day
+                {% else %}
+                     {{ closing_day - current_day }} days
+                {% endif %}
+            {% else %}
+                {% if (closing_month - current_month - 1) < 1 %}
+                {% elseif (closing_month - current_month - 1) < 2 %}
+                    {{ closing_month - current_month - 1 }} month
+                {% else %}
+                    {{ closing_month - current_month - 1 }} months
+                {% endif %}
+                {% if (closing_month - 1) in months28 %}
+                    {% if ((closing_year / 4) - (closing_year // 4)) == 0 %}
+                        {% if (29 - current_day + closing_day) < 1 %}
+                        {% elseif (29 - current_day + closing_day) < 2 %}
+                            {{ 29 - current_day + closing_day }} day
+                        {% else %}
+                            {{ 29 - current_day + closing_day }} days
+                        {% endif %}
+                    {% else %}
+                        {% if (28 - current_day + closing_day) < 1 %}
+                        {% elseif (28 - current_day + closing_day) < 2 %}
+                            {{ 28 - current_day + closing_day }} day
+                        {% else %}
+                            {{ 28 - current_day + closing_day }} days
+                        {% endif %}
+                    {% endif %}
+                {% elseif (closing_month - 1) in months30 %}
+                    {% if (30 - current_day + closing_day) < 1 %}
+                    {% elseif (30 - current_day + closing_day) < 2 %}
+                        {{ 30 - current_day + closing_day }} day
+                    {% else %}
+                        {{ 30 - current_day + closing_day }} days
+                    {% endif %}
+                {% else %}
+                    {% if (31 - current_day + closing_day) < 1 %}
+                    {% elseif (31 - current_day + closing_day) < 2 %}
+                        {{ 31 - current_day + closing_day }} day
+                    {% else %}
+                        {{ 31 - current_day + closing_day }} days
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% else %}
+        {% if closing_month == current_month %}
+            {% if closing_day == current_day %}
+                {% if (closing_year - current_year) < 1 %}
+                {% elseif (closing_year - current_year) < 2 %}
+                    {{ closing_year - current_year }} year
+                {% else %}
+                    {{ closing_year - current_year }} years
+                {% endif %}
+            {% elseif closing_day > current_day %}
+                {% if (closing_year - current_year) < 1 %}
+                {% elseif (closing_year - current_year) < 2 %}
+                    {{ closing_year - current_year }} year
+                {% else %}
+                    {{ closing_year - current_year }} years
+                {% endif %}
+                {% if (closing_day - current_day) < 1 %}
+                {% elseif (closing_day - current_day) < 2 %}
+                     {{ closing_day - current_day }} day
+                {% else %}
+                     {{ closing_day - current_day }} days
+                {% endif %}
+            {% else %}
+                {% if (closing_year - current_year) < 1 %}
+                {% elseif (closing_year - current_year) < 2 %}
+                    {{ closing_year - current_year }} year 11 months
+                {% else %}
+                    {{ closing_year - current_year }} years 11 months
+                {% endif %}
+                {% if (closing_month - 1) in months28 %}
+                    {% if (((closing_year - 1) / 4) - ((closing_year - 1) // 4)) == 0 %}
+                        {% if (29 - current_day + closing_day) < 1 %}
+                        {% elseif (29 - current_day + closing_day) < 2 %}
+                             {{ 29 - current_day + closing_day }} day
+                        {% else %}
+                             {{ 29 - current_day + closing_day }} days
+                        {% endif %}
+                    {% else %}
+                        {% if (28 - current_day + closing_day) < 1 %}
+                        {% elseif (28 - current_day + closing_day) < 2 %}
+                             {{ 28 - current_day + closing_day }} day
+                        {% else %}
+                             {{ 28 - current_day + closing_day }} days
+                        {% endif %}
+                    {% endif %}
+                {% elseif (closing_month - 1) in months30 %}
+                    {% if (30 - current_day + closing_day) < 1 %}
+                    {% elseif (30 - current_day + closing_day) < 2 %}
+                         {{ 30 - current_day + closing_day }} day
+                    {% else %}
+                         {{ 30 - current_day + closing_day }} days
+                    {% endif %}
+                {% else %}
+                    {% if (31 - current_day + closing_day) < 1 %}
+                    {% elseif (31 - current_day + closing_day) < 2 %}
+                         {{ 31 - current_day + closing_day }} day
+                    {% else %}
+                         {{ 31 - current_day + closing_day }} days
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% elseif closing_month > current_month %}
+            {% if closing_day == current_day %}
+                {% if (closing_year - current_year) < 1 %}
+                {% elseif (closing_year - current_year) < 2 %}
+                    {{ closing_year - current_year }} year
+                {% else %}
+                    {{ closing_year - current_year }} years
+                {% endif %}
+                {% if (closing_month - current_month) < 1 %}
+                {% elseif (closing_month - current_month) < 2 %}
+                     {{ closing_month - current_month }} month
+                {% else %}
+                     {{ closing_month - current_month }} months
+                {% endif %}
+            {% elseif closing_day > current_day %}
+                {% if (closing_year - current_year) < 1 %}
+                {% elseif (closing_year - current_year) < 2 %}
+                    {{ closing_year - current_year }} year
+                {% else %}
+                    {{ closing_year - current_year }} years
+                {% endif %}
+                {% if (closing_month - current_month) < 1 %}
+                {% elseif (closing_month - current_month) < 2 %}
+                     {{ closing_month - current_month }} month
+                {% else %}
+                     {{ closing_month - current_month }} months
+                {% endif %}
+                {% if (closing_day - current_day) < 1 %}
+                {% elseif (closing_day - current_day) < 2 %}
+                     {{ closing_day - current_day }} day
+                {% else %}
+                     {{ closing_day - current_day }} days
+                {% endif %}
+            {% else %}
+                {% if (closing_year - current_year) < 1 %}
+                {% elseif (closing_year - current_year) < 2 %}
+                    {{ closing_year - current_year }} year
+                {% else %}
+                    {{ closing_year - current_year }} years
+                {% endif %}
+                {% if (closing_month - current_month - 1) < 1 %}
+                {% elseif (closing_month - current_month - 1) < 2 %}
+                     {{ closing_month - current_month - 1 }} month
+                {% else %}
+                     {{ closing_month - current_month - 1 }} months
+                {% endif %}
+                {% if (closing_month - 1) in months28 %} 
+                    {% if ((closing_year / 4) - (closing_year // 4)) == 0 %}
+                        {% if (29 - current_day + closing_day) < 1 %}
+                        {% elseif (29 - current_day + closing_day) < 2 %}
+                             {{ 29 - current_day + closing_day }} day
+                        {% else %}
+                             {{ 29 - current_day + closing_day }} days
+                        {% endif %}
+                    {% else %}
+                        {% if (28 - current_day + closing_day) < 1 %}
+                        {% elseif (28 - current_day + closing_day) < 2 %}
+                             {{ 28 - current_day + closing_day }} day
+                        {% else %}
+                             {{ 28 - current_day + closing_day }} days
+                        {% endif %}
+                    {% endif %}
+                {% elseif (closing_month - 1) in months30 %}
+                    {% if (30 - current_day + closing_day) < 1 %}
+                    {% elseif (30 - current_day + closing_day) < 2 %}
+                         {{ 30 - current_day + closing_day }} day
+                    {% else %}
+                         {{ 30 - current_day + closing_day }} days
+                    {% endif %}
+                {% else %}
+                    {% if (31 - current_day + closing_day) < 1 %}
+                    {% elseif (31 - current_day + closing_day) < 2 %}
+                         {{ 31 - current_day + closing_day }} day
+                    {% else %}
+                         {{ 31 - current_day + closing_day }} days
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% else %}
+            {% if closing_day == current_day %}
+                {% if (closing_year - current_year - 1) < 1 %}
+                {% elseif (closing_year - current_year - 1) < 2 %}
+                    {{ closing_year - current_year - 1 }} year
+                {% else %}
+                    {{ closing_year - current_year - 1 }} years
+                {% endif %}
+                {% if (12 - current_month + closing_month) < 1 %}
+                {% elseif (12 - current_month + closing_month) < 2 %}
+                    {{ 12 - current_month + closing_month }} month
+                {% else %}
+                    {{ 12 - current_month + closing_month }} months
+                {% endif %}
+            {% elseif closing_day > current_day %}
+                {% if (closing_year - current_year - 1) < 1 %}
+                {% elseif (closing_year - current_year - 1) < 2 %}
+                    {{ closing_year - current_year - 1 }} year
+                {% else %}
+                    {{ closing_year - current_year - 1 }} years
+                {% endif %}
+                {% if (12 - current_month + closing_month) < 1 %}
+                {% elseif (12 - current_month + closing_month) < 2 %}
+                    {{ 12 - current_month + closing_month }} month
+                {% else %}
+                    {{ 12 - current_month + closing_month }} months
+                {% endif %}
+                {% if (closing_day - current_day) < 1 %}
+                {% elseif (closing_day - current_day) < 2 %}
+                     {{ closing_day - current_day }} day
+                {% else %}
+                     {{ closing_day - current_day }} days
+                {% endif %}
+            {% else %}
+                {% if (closing_year - current_year - 1) < 1 %}
+                {% elseif (closing_year - current_year - 1) < 2 %}
+                    {{ closing_year - current_year - 1 }} year
+                {% else %}
+                    {{ closing_year - current_year - 1 }} years
+                {% endif %}
+                {% if (12 - current_month + closing_month - 1) < 1 %}
+                {% elseif (12 - current_month + closing_month - 1) < 2 %}
+                     {{ 12 - current_month + closing_month - 1 }} month
+                {% else %}
+                     {{ 12 - current_month + closing_month - 1 }} months
+                {% endif %}
+                {% if (closing_month - 1) in months28 %}
+                    {% if ((closing_year / 4) - (closing_year // 4)) == 0 %}
+                        {% if (29 - current_day + closing_day) < 1 %}
+                        {% elseif (29 - current_day + closing_day) < 2 %}
+                             {{ 29 - current_day + closing_day }} day
+                        {% else %}
+                             {{ 29 - current_day + closing_day }} days
+                        {% endif %}
+                    {% else %}
+                        {% if (28 - current_day + closing_day) < 1 %}
+                        {% elseif (28 - current_day + closing_day) < 2 %}
+                             {{ 28 - current_day + closing_day }} day
+                        {% else %}
+                             {{ 28 - current_day + closing_day }} days
+                        {% endif %}
+                    {% endif %}
+                {% elseif (closing_month - 1) in months30 %}
+                    {% if (30 - current_day + closing_day) < 1 %}
+                    {% elseif (30 - current_day + closing_day) < 2 %}
+                         {{ 30 - current_day + closing_day }} day
+                    {% else %}
+                         {{ 30 - current_day + closing_day }} days
+                    {% endif %}
+                {% else %}
+                    {% if (31 - current_day + closing_day) < 1 %}
+                    {% elseif (31 - current_day + closing_day) < 2 %}
+                         {{ 31 - current_day + closing_day }} day
+                    {% else %}
+                         {{ 31 - current_day + closing_day }} days
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endif %}
